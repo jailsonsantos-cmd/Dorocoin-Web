@@ -1,0 +1,2 @@
+sqlite3 database.db "CREATE TABLE alunos (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, turma TEXT, saldo INTEGER);"
+sqlite3 database.db "INSERT INTO alunos (nome, turma, saldo) VALUES ('Bethéia Nubia', '1ºA', 100);"
