@@ -2,63 +2,144 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>DOROCOIN - Gestão Escolar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOROCOIN - Consultar Saldo</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { color: #2c3e50; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
-    th { background-color: #f4f4f4; }
-    button { padding: 5px 10px; cursor: pointer; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      text-align: center;
+      background: url('img_5a709f4ad5863.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      box-shadow: 0px 3px 6px rgba(0,0,0,0.5);
+    }
+
+    header img {
+      width: 150px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+      color: #ffd700;
+    }
+
+    header p {
+      font-size: 1.1em;
+      margin: 5px 0 0;
+      color: #bbb;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 70vh;
+    }
+
+    .consulta {
+      background: rgba(0,0,0,0.6);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      width: 350px;
+    }
+
+    .consulta h2 {
+      margin-bottom: 20px;
+      color: #ffd700;
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 1em;
+      text-align: center;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #ffd700;
+      color: #000;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ffbf00;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.6);
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      color: #aaa;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
-  <h1>💰 DOROCOIN - Gestão Escolar</h1>
-  <h2>Turma 1ºA</h2>
-  <table id="alunosTable">
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Turma</th>
-        <th>Saldo</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <header>
+    <img src="8.jpg" alt="Logo Dorocoin">
+    <h1>💰 DOROCOIN</h1>
+    <p>A moeda digital da nossa escola</p>
+  </header>
+
+  <main>
+    <section class="consulta">
+      <h2>Consultar Saldo</h2>
+      <input type="text" id="aluno" placeholder="Digite o nome do aluno">
+      <button onclick="consultarSaldo()">Consultar</button>
+      <div id="resultado"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 - Projeto Escolar DOROCOIN</p>
+  </footer>
 
   <script>
-    async function carregarAlunos() {
-      const res = await fetch("/api/alunos");
-      const alunos = await res.json();
-      const tbody = document.querySelector("#alunosTable tbody");
-      tbody.innerHTML = "";
+    const saldos = {
+      "Bethéia Nubia": 120,
+      "Jailson Santos": 250,
+      "Sebastião": 75,
+      "Selma": 300
+    };
 
-      alunos.forEach(aluno => {
-        const tr = document.createElement("tr");
+    function consultarSaldo() {
+      const nome = document.getElementById("aluno").value.trim();
+      const resultado = document.getElementById("resultado");
 
-        tr.innerHTML = `
-          <td>${aluno.nome}</td>
-          <td>${aluno.turma}</td>
-          <td><input type="number" value="${aluno.saldo}" id="saldo-${aluno.id}" /></td>
-          <td><button onclick="salvar(${aluno.id})">Salvar</button></td>
-        `;
-
-        tbody.appendChild(tr);
-      });
+      if (nome in saldos) {
+        resultado.innerHTML = `💰 O aluno <strong>${nome}</strong> possui <strong>${saldos[nome]} DOROCOINS</strong>`;
+      } else {
+        resultado.innerHTML = `⚠️ Aluno <strong>${nome}</strong> não encontrado!`;
+      }
     }
-
-    async function salvar(id) {
-      const saldo = document.querySelector(`#saldo-${id}`).value;
-      await fetch(`/api/alunos/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ saldo: parseInt(saldo) })
-      });
-      alert("Saldo atualizado!");
-    }
-
-    carregarAlunos();
   </script>
 </body>
 </html>
